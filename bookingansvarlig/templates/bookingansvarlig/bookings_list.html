@@ -1,0 +1,84 @@
+{% extends 'band_booking/base.html' %}
+{% block content %}
+    {% url 'bookingansvarlig:bookings-filtered' as filtered_url %}
+    <title>Bookingtilbud</title>
+    <div class="booking-list-wrapper center-horizontal">
+        <div class="booking-overview-button-container booking-overview-float-down">
+            <a href="{% url 'bookingansvarlig:create_booking_offer' %}" class="booking-offer-button button black-link">
+                <div class="basic-button booking-list-new-offer-button">
+                    Nytt bookingtilbud
+                </div>
+            </a>
+        </div>
+
+        <div class="booking-overview-button-container">
+            <a href="{% url 'bookingansvarlig:bookings-filtered' %}" class="booking-offer-button button black-link">
+                <div class="basic-button booking-list-filter-button{% if request.get_full_path == filtered_url %} disabled-filter-button{% endif %}">
+                    Sendt
+                </div>
+            </a>
+        </div>
+
+        <div class="booking-overview-button-container">
+            <a href="{% url 'bookingansvarlig:bookings' %}" class="booking-offer-button button black-link">
+                <div class="basic-button booking-list-filter-button{% if request.get_full_path != filtered_url %} disabled-filter-button{% endif %}">
+                    Alle
+                </div>
+            </a>
+        </div>
+
+
+        <table class="booking-overview-table">
+            <thead class="booking-overview-table-header">
+            <tr>
+                <th>Tittel</th>
+                <th>Mottaker</th>
+                <th>Ansvarlig</th>
+                <th>Tilbud</th>
+                <th>Dato</th>
+                <th>Status</th>
+                {% if perms.band_booking.can_approve_booking_offers %}
+                    <th>Godkjenn</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.title_name }}</td>
+                    <td>{{ booking.recipient_email }}</td>
+                    {% if booking.sender.first_name %}
+                        <td>{{ booking.sender.first_name }} {{ booking.sender.last_name }}</td>
+                    {% else %}
+                        <td>{{ booking.sender.username }}</td>
+                    {% endif %}
+                    <td><a href="{% url 'bookingansvarlig:create_booking_offer' booking.pk %}">Se tilbud</a></td>
+                    <td>{{ booking.date }}</td>
+                    <td class="{{ booking.status }}">{{ booking.get_status_word }}</td>
+                    {% if perms.band_booking.can_approve_booking_offers %}
+                        {% if booking.status == "U" %}
+                            <td class=" booking-offer-accept-buttons booking-offer-disabled-approval-buttons">
+                                <a href="{% url 'bookingsjef:approve_booking_offer' booking.pk %}" class="black-link">
+                                    <div class="booking-offer-accept-button S">
+                                        Godkjenn
+                                    </div>
+                                </a>
+                                <a href="{% url 'bookingsjef:decline_booking_offer' booking.pk %}" class="black-link">
+                                    <div class="booking-offer-decline-button N">
+                                        Avslå
+                                    </div>
+                                </a>
+                            </td>
+                        {% else %}
+                            <td class="booking-offer-disabled-approval-buttons">
+
+                            </td>
+                        {% endif %}
+                    {% endif %}
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

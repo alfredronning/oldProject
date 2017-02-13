@@ -1,0 +1,81 @@
+{% extends "band_booking/base.html" %}
+{% load static %}
+{% block content %}
+    <title>{{ title }}</title>
+    <div class="economic-result-wrapper center-horizontal">
+        <h1 class="economic-result-title">Rapport - {{ title }} - {{ date }}</h1>
+        <div class="table economic-result-information-table">
+            <div class="economic-result-information-table-header">
+                <div class="table-cell economic-result-information-table-title">
+                    Felt
+                </div>
+
+                <div class="table-cell economic-result-information-table-title">
+                    Verdi
+                </div>
+            </div>
+            <div>
+                <div class="table-cell">
+                    Band:
+                </div>
+                <div class="table-cell">
+                    <div class="table economic-result-band-table">
+                    {% for band in bands %}
+                        <div class="table-row">
+                            <div class="table-cell-small">
+                                <a href="/artist/{{ band.title }}" class="economic-result-link"> {{ band.title }} </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="table-cell">
+                    Publikumstall
+                </div>
+                <div class="table-cell">
+                    {{ attendance }}
+                </div>
+            </div>
+            <div>
+                <div class="economic-result-information-table-title table-cell">
+                    Kostnader:
+                </div>
+            </div>
+            {% for expense, cost in expenses.items %}
+                <div>
+                    <div class="table-cell">
+                        {{ expense }}
+                    </div>
+                    <div class="table-cell">
+                        {{ cost }}
+                    </div>
+                </div>
+            {% endfor %}
+            <div>
+                <div class="economic-result-information-table-title table-cell">
+                    Inntekter:
+                </div>
+            </div>
+            {% for item, value in income.items %}
+                <div>
+                    <div class="table-cell">
+                        {{ item }}
+                    </div>
+                    <div class="table-cell">
+                        {{ value }}
+                    </div>
+                </div>
+            {% endfor %}
+            <div>
+                <div class="economic-result-information-table-title table-cell">
+                    Økonomisk resultat
+                </div>
+                <div class="table-cell">
+                    {{ economic_result }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

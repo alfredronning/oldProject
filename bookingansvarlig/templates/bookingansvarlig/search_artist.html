@@ -1,0 +1,18 @@
+{% extends 'band_booking/base.html' %}
+{% load static %}
+{% block content %}
+    <title>Søk på artist</title>
+    <script src="{% static 'bookingansvarlig/scripts/search_artist.js' %}"></script>
+    {% if error %}
+        <div id="error-message" class="artist-search-error-message error-message center-horizontal">
+            {{ error }}
+        </div>
+    {% endif %}
+    <div class="centered artist-search-area">
+        <form class="artist-search-form" action="" method="get">
+            <label for="artist_name" class="bold">Søk på artist:</label> <br/>
+            <input id="artist_name" type="text" value="{% if name %}{{ name }}{% endif %}" placeholder="Søk på artist navn" name="name" class="artist-search-box">
+            <input class="artist-search-search-button basic-button" type="submit" value="Søk">
+        </form>
+    </div>
+{% endblock %}

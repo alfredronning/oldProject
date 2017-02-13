@@ -1,0 +1,84 @@
+{% extends 'band_booking/base.html' %}
+{% load static %}
+{% block content %}
+    <title> Bookingtilbud </title>
+    <script src="{% static 'bookingansvarlig/scripts/concert_overview.js' %}"></script>
+    <div class="create-booking-offer-wrapper center-horizontal">
+        {% if saved %}
+            <div class="booking-offer-saved-message booking-offer-status-message" id="saved-message">
+                <span class="center-booking-status-message-vertical">
+                    Tilbud er lagret
+                </span>
+            </div>
+        {% endif %}
+        {% if error %}
+            <div class="error-message booking-offer-status-message" id="error-message">
+                <span class="center-booking-status-message-vertical">
+                    {{ error }}
+                </span>
+            </div>
+        {% endif %}
+        {% if offer %}
+            <div class="{{ offer.status }} booking-offer-status-message" id="offer-status-message">
+                <span class="center-booking-status-message-vertical">
+                    {{ status }}
+                </span>
+            </div>
+        {% endif %}
+		<form class="booking-offer-offer-form" method="post" action="{{ link }}" onsubmit="return checkInput()" autocomplete="off">
+            {% csrf_token %}
+			<h1 class="page-title"> Bookingtilbud </h1>
+
+			<div class="booking-offer-text_fields">
+				<div class="booking-offer-title_field">
+					<label class="booking-offer-label"  for="title" >
+						Tittel:
+					</label>
+					<br>
+					<input class="booking-offer-title-input-field" type="text" name="title" id="title" placeholder="Bookingtilbud tittel" required {% if offer %}value="{{ offer.title_name }}"{% endif %}>
+				</div>
+
+				<div class="booking-offer-email">
+					<label class="booking-offer-label"  for="email">
+						E-post manager:
+					</label>
+					<br>
+					<input class="booking-offer-email-input-field" type="email" name="email" id="email" placeholder="Managers epost" required {% if offer %}value="{{ offer.recipient_email }}"{% endif %}>
+				</div>
+			</div>
+            <input type="hidden" name="scene" id="scene_selector" value="{{ scene }}" hidden required/>
+			<br>
+
+
+            <div class="booking-offer-date">
+                <label for="date_selector">Dato: &nbsp;</label>
+                <input id="date_selector" name="date" type="date" placeholder="yyyy-mm-dd" {% if offer %}value="{{ date }}"{% endif %} required>
+            </div>
+
+            <div class="table-cell booking-offer-scene-selector">
+                <div class="dropdown">
+                    Scene: <span id="currently-selected-scene" class="dropdown-currently-selected">{% if not scene %}Ingen
+                    valgt{% endif %}{{ scene }}</span>
+                    <div class="dropdown-wrapper">
+                        {% for current_scene in scenes %}
+                            <div class="dropdown-item scene-item{% if current_scene == scene %} dropdown-currently-selected-item{% endif %}">{{ current_scene }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+
+			<div class="booking-offer-email-text">
+				<label class="booking-offer-label" for="message">Beskjed: </label>
+				<br>
+				<textarea class="booking-offer-message-field" id="message" name="message" placeholder="Bookingtilbud tekst" required>{% if offer %}{{ email_text }}{% endif %}</textarea>
+				<br> <br>
+			</div>
+
+			<input class="booking-offer-button booking-offer-save-button basic-button" type="submit" value="Lagre tilbud"/>
+		</form>
+        <a href="{% url 'bookingansvarlig:bookings' %}">
+            <button class="booking-offer-button booking-offer-menu-button basic-button"> Oversikt tilbud </button>
+        </a>
+    </div>
+{% endblock %}

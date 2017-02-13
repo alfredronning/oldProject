@@ -1,0 +1,40 @@
+{% if error %}
+    <div class="artist-information-event-error">
+        {{ error }}
+    </div>
+{% else %}
+    <div class="artist-information-events-table">
+        <div class="artist-information-event-table-wrapper-table">
+            <div class="artist-information-event-headers">
+                <span class="table-cell small-padding-right">
+                    Konsert navn
+                </span>
+                <span class="artist-information-event-date-header table-cell small-padding-right small-padding-left">
+                    Dato
+                </span>
+                <span class="artist-information-event-city-header table-cell small-padding-left">
+                    Sted
+                </span>
+            </div>
+        </div>
+        <div class="artist-information-event-table-wrapper overflow-scroll-y">
+            <div class="artist-information-event-table-wrapper-table">
+                <div class="artist-information-event-table-events overflow-scroll-y table-row-group">
+                    {% for event in events %}
+                        <div class="artist-information-event">
+                            <span class="table-cell small-padding-right">
+                                {{ event.name }}
+                            </span>
+                            <span class="artist-information-event-date table-cell small-padding-right small-padding-left">
+                                {{ event.date }}
+                            </span>
+                            <span class="artist-information-event-city table-cell small-padding-left">
+                                {{ event.city }}
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{%  endif %}
